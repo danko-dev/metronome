@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metronome</title>
+    <style>
+      body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        margin-top: 50px;
+      }
+      input {
+        width: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Metronome</h1>
+    <label
+      >BPM: <input type="number" id="bpm" value="120" min="30" max="300"
+    /></label>
+    <button id="startStop">Start</button>
+
+    <label
+      >Subdivisions:
+      <select id="subdivisions">
+        <option value="1">Quarter Notes</option>
+        <option value="2">Eighth Notes</option>
+        <option value="3">Triplets</option>
+        <option value="4">Sixteenth Notes</option>
+      </select>
+    </label>
+
+    <label
+      >Bars On: <input type="number" id="barsOn" value="4" min="1"
+    /></label>
+    <label
+      >Bars Rest: <input type="number" id="barsRest" value="1" min="0"
+    /></label>
+
+    <label
+      >Time Signature:
+      <select id="timeSignature">
+        <option value="4,4">4/4</option>
+        <option value="3,4">3/4</option>
+        <option value="6,8">6/8</option>
+        <option value="7,8">7/8</option>
+        <option value="5,8">5/8</option>
+        <option value="5,4">5/4</option>
+        <option value="12,8">12/8</option>
+      </select>
+    </label>
+
+    <script src="metronome.js"></script>
+  </body>
+</html>
