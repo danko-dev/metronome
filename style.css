@@ -1,12 +1,3 @@
-/* body {
-  text-align: center;
-  font-family: Arial, sans-serif;
-  margin-top: 50px;
-}
-input {
-  width: 60px;
-}*/
-
 body {
   text-align: center;
   background-color: #121212; /* Dark background */
@@ -63,8 +54,8 @@ input {
   background-color: black;
   transition: background-color 0.1s ease-in-out, transform 0.1s ease-in-out;
   display: flex;
-  /* align-items: center;
-  justify-content: center; */
+  align-items: center;
+  justify-content: center;
   margin: 20px auto;
 }
 
@@ -82,26 +73,3 @@ input {
   background-color: lightgray;
   transform: scale(1.05);
 }
-
-/* #metronomeDisplay {
-} */
-
-/* #metronomeDisplay {
-  width: 50px;
-  height: 50px;
-  background: #333;
-  border-radius: 50%;
-  transition: background 0.1s ease-in-out;
-} */
-
-/* .strong-beat {
-  background: #ffcc00; /* Yellow for strong beat 
-}
-
-.normal-beat {
-  background: #00ffcc; /* Cyan for normal beat 
-}
-
-.subdivision-beat {
-  background: #ff66cc; /* Pink for subdivisions 
-} */
