@@ -41,7 +41,41 @@ document.getElementById("subdivisions").addEventListener("input", (e) => {
   subdivision = parseInt(e.target.value);
 });
 
+function scheduleBeats() {
+  if (!isPlaying) return;
+
+  let timeNow = audioContext.currentTime;
+  let elapsed = timeNow - startTime;
+
+  // Smooth tempo adjustment
+  if (rampDuration > 0) {
+    let progress = Math.min(elapsed / rampDuration, 1);
+    bpm = startBPM + progress * (targetBPM - startBPM);
+  }
+
+  let interval = 60 / bpm / subdivisions;
+
+  playClick(
+    timeNow,
+    currentBeat % subdivisions === 0,
+    currentBeat % subdivisions !== 0
+  );
+
+  currentBeat = (currentBeat + 1) % (4 * subdivisions);
+
+  setTimeout(scheduleBeats, interval * 1000);
+}
+
 function scheduleNotes() {
+  let timeNow = audioContext.currentTime;
+  let elapsed = timeNow - startTime;
+
+  // Smooth tempo adjustment
+  if (rampDuration > 0) {
+    let progress = Math.min(elapsed / rampDuration, 1);
+    bpm = startBPM + progress * (targetBPM - startBPM);
+  }
+
   while (nextNoteTime < audioContext.currentTime + scheduleAheadTime) {
     if (!isResting) {
       for (let i = 0; i < beatsPerBar * subdivision; i++) {
@@ -69,24 +103,36 @@ function scheduleNotes() {
 function playClick(time, isFirstBeat, isSubdivision) {
   const osc = audioContext.createOscillator();
   const gain = audioContext.createGain();
+  const display = document.getElementById("metronomeDisplay");
+
+  display.classList.remove("strong-beat", "normal-beat", "subdivision-beat");
 
   if (isFirstBeat) {
-    // First beat of the bar (strong accent)
     osc.frequency.value = 1000;
     gain.gain.value = 0.6;
+    display.classList.add("strong-beat");
   } else if (isSubdivision) {
-    // Subdivision clicks (lighter sound)
     osc.frequency.value = 700;
     gain.gain.value = 0.2;
+    display.classList.add("subdivision-beat");
   } else {
-    // Normal quarter note beats
     osc.frequency.value = 850;
     gain.gain.value = 0.4;
+    display.classList.add("normal-beat");
   }
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      display.classList.remove(
+        "strong-beat",
+        "normal-beat",
+        "subdivision-beat"
+      );
+    }, 100);
+  });
 
   osc.connect(gain);
   gain.connect(audioContext.destination);
-
   osc.start(time);
   osc.stop(time + 0.05);
 }
@@ -114,3 +160,16 @@ document.getElementById("timeSignature").addEventListener("change", (e) => {
   noteValue = parseInt(note);
   currentBar = 0; // Reset bar count
 });
+
+// acceleration and slow down
+
+let targetBPM = bpm;
+let rampDuration = 0; // Seconds to change tempo
+let startTime, startBPM;
+
+function setTargetBPM(newBPM, duration) {
+  targetBPM = newBPM;
+  rampDuration = duration;
+  startTime = audioContext.currentTime;
+  startBPM = bpm;
+}
